@@ -52,25 +52,33 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     // TODO: implement onKeyEvent
-    // velocity.x = 0;
-    // velocity.y = 0;
-    // print(keysPressed.contains(LogicalKeyboardKey.keyA));
-    if (keysPressed.contains(LogicalKeyboardKey.keyA) ) {
+
+    final isAKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyA);
+    final isDKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD);
+    final isSKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyS);
+    final isWKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyW);
+    final isFKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyF);
+
+    if (isFKeyPressed) {
+      velocity.x = 0;
+      velocity.y = 0;
+    }
+    if (isAKeyPressed) {
       velocity.x = -100;
     }
-    if (keysPressed.contains(LogicalKeyboardKey.keyD)) {
+    if (isDKeyPressed) {
       velocity.x = 100;
     }
-
-    if (keysPressed.contains(LogicalKeyboardKey.keyW) ) {
+    if (isWKeyPressed) {
       velocity.y = -100;
     }
-    if (keysPressed.contains(LogicalKeyboardKey.keyS)){
+    if (isSKeyPressed) {
       velocity.y = 100;
     }
+
+
     return super.onKeyEvent(event, keysPressed);
   }
-
 
   void updateVelocity(double dt) {
     position += velocity * dt;

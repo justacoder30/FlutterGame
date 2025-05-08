@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_game/HeroGame.dart';
 
@@ -22,18 +21,17 @@ enum PlayerState {
   jump
 }
 
-class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler {
+class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler{
   Vector2 velocity = Vector2.zero();
   final double graviry = 1000;
   final double moveSpeed = 150;
   final double jump = 400;
+
   bool isFacingRight = true;
   PlayerDirection direction = PlayerDirection.none;
 
 
-  Player({required Vector2 pos}) {
-    position = pos;
-  }
+  Player(Vector2 pos) : super(position: pos);
 
   @override
   FutureOr<void> onLoad() {
@@ -54,58 +52,27 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     // TODO: implement onKeyEvent
-    final bool is_A_Pressed = keysPressed.contains(LogicalKeyboardKey.keyA) ;
-    final bool is_D_Pressed = keysPressed.contains(LogicalKeyboardKey.keyD) ;
-    final bool is_S_Pressed = keysPressed.contains(LogicalKeyboardKey.keyS) ;
-    final bool is_W_Pressed = keysPressed.contains(LogicalKeyboardKey.keyW) ;
+    // velocity.x = 0;
+    // velocity.y = 0;
+    // print(keysPressed.contains(LogicalKeyboardKey.keyA));
+    if (keysPressed.contains(LogicalKeyboardKey.keyA) ) {
+      velocity.x = -100;
+    }
+    if (keysPressed.contains(LogicalKeyboardKey.keyD)) {
+      velocity.x = 100;
+    }
 
-    direction = PlayerDirection.none;
-
-    if (is_A_Pressed && is_D_Pressed) {
-      direction = PlayerDirection.none;
-    } else if (is_A_Pressed) {
-      direction = PlayerDirection.left;
-      if (isFacingRight) {
-        flipHorizontallyAroundCenter();
-        isFacingRight = false;
-      }
-    } else if (is_D_Pressed) {
-      direction = PlayerDirection.right;
-      if (!isFacingRight) {
-        flipHorizontallyAroundCenter();
-        isFacingRight = true;
-      }
-    } else if (is_W_Pressed) {
-      direction = PlayerDirection.up;
-    } else if (is_S_Pressed) {
-      direction = PlayerDirection.down;
+    if (keysPressed.contains(LogicalKeyboardKey.keyW) ) {
+      velocity.y = -100;
+    }
+    if (keysPressed.contains(LogicalKeyboardKey.keyS)){
+      velocity.y = 100;
     }
     return super.onKeyEvent(event, keysPressed);
   }
 
+
   void updateVelocity(double dt) {
-    // if (direction == PlayerDirection.none) {
-    //   velocity.x = 0;
-    // }
-    double dirX = 0.0;
-    switch(direction) {
-      case PlayerDirection.left:
-        dirX = -moveSpeed;
-        break;
-      case PlayerDirection.right:
-        dirX = moveSpeed;
-        break;
-      case PlayerDirection.up:
-        break;
-      case PlayerDirection.down:
-        break;
-      case PlayerDirection.none:
-        dirX = 0;
-        break;
-    }
-
-    velocity.x = dirX;
-
     position += velocity * dt;
   }
 

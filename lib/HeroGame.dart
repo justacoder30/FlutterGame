@@ -2,45 +2,39 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flame_tiled/flame_tiled.dart';
 
 import 'Entity/Player.dart';
-import 'map.dart';
 
-class HeroGame extends FlameGame with HasKeyboardHandlerComponents{
-  late final MapGame map;
+class HeroGame extends FlameGame with HasKeyboardHandlerComponents {
   late final CameraComponent cameraComponent;
+  late TiledComponent map;
+  late World worldGame = World();
   late final Player player;
-
-  HeroGame() {
-    WidgetsFlutterBinding.ensureInitialized();
-    Flame.device.fullScreen();
-    Flame.device.setLandscape();
-  }
 
   @override
   FutureOr<void> onLoad() async {
     // TODO: implement onLoad
     await images.loadAllImages();
 
-    map = MapGame();
-    player = Player(pos: Vector2(300, 20));
+    player = Player(Vector2(0, 0));
+    map = await TiledComponent.load('map1.tmx', Vector2.all(16));
+    worldGame.addAll([
+      map,
+      player
+    ]);
 
     cameraComponent = CameraComponent.withFixedResolution(
         width: 560,
         height: 315,
-        world: map
+        world: worldGame
     );
-    map.add(player);
-
     cameraComponent.viewfinder.anchor = Anchor.center;
     cameraComponent.follow(player);
-
     addAll([
       cameraComponent,
-      map,
+      worldGame,
     ]);
     return super.onLoad();
   }

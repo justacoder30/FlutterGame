@@ -9,10 +9,6 @@ class MapGame extends World {
 
   @override
   FutureOr<void> onLoad() async {
-    // TODO: implement onLoad
-    mapComponent = await TiledComponent.load('map1.tmx', Vector2.all(16));
-    add(mapComponent);
-
     return super.onLoad();
   }
 }

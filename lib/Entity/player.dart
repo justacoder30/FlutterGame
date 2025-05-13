@@ -19,9 +19,11 @@ enum PlayerState {
 
 class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler, CollisionCallbacks {
   final double graviry = 1000;
-  final double moveSpeed = 150;
+  // final double moveSpeed = 150;
+  final double moveSpeed = 300;
   final double jump = 400;
   final texSize = Vector2(128, 128);
+  bool isOnGround = false;
   Vector2 velocity = Vector2.zero();
   List<RectBox> collisionsBox = [];
 
@@ -30,9 +32,14 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     size: Vector2(22, 64),
   );
 
-  RectBox attachHitBox = RectBox (
+  RectBox attachBox = RectBox (
     position: Vector2(43, 60),
     size: Vector2(70, 68),
+  );
+
+  RectBox gravityBox = RectBox(
+    position: Vector2(21, 128),
+    size: Vector2(22, 1)
   );
 
   bool isFacingRight = true;
@@ -41,17 +48,22 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   @override
   FutureOr<void> onLoad() {
     // TODO: implement onLoad
-    hitbox.debugMode = true;
-    attachHitBox.debugMode = true;
 
     add(RectangleHitbox(
       position: hitbox.position,
       size: hitbox.size
     ));
+
     add(RectangleHitbox(
-        position: attachHitBox.position,
-        size: attachHitBox.size
+        position: attachBox.position,
+        size: attachBox.size
     ));
+
+    add(RectangleHitbox(
+        position: gravityBox.position,
+        size: gravityBox.size
+    ));
+
     loadAnimation();
     // anchor = Anchor(0.1640625, 0.5);
     anchor = Anchor(0.25, 0.75);
@@ -64,7 +76,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   void update(double dt) {
     // TODO: implement update
     updateVelocity(dt);
-
     updatePosition(dt);
     super.update(dt);
   }
@@ -79,8 +90,9 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     final isWKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyW);
     final isFKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyF);
     final isJKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyJ);
+    final isSpacePressed = keysPressed.contains(LogicalKeyboardKey.space);
 
-    // velocity.x *= 0.05;
+    print(keysPressed.contains(LogicalKeyboardKey.keyD));
     if (isFKeyPressed) {
       velocity.x = 0;
       velocity.y = 0;
@@ -96,7 +108,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
       current = PlayerState.run;
       if (isFacingRight) {
         flipHorizontally();
-        // position.x += hitbox.width;
         isFacingRight = false;
       }
     }
@@ -105,10 +116,14 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
       current = PlayerState.run;
       if (!isFacingRight) {
         flipHorizontally();
-        // position.x -= hitbox.width;
         isFacingRight = true;
       }
     }
+
+    if (isSpacePressed && isOnGround) {
+      velocity.y = -jump;
+    }
+
     if (isWKeyPressed) {
       velocity.y = -100;
     }
@@ -120,13 +135,36 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     return super.onKeyEvent(event, keysPressed);
   }
 
-  void updateVelocity(double dt) {
+  bool IsOnGround() {
+    gravityBox.position = Vector2(position.x - hitbox.width/2, position.y + hitbox.height/2);
+    for(var collision in collisionsBox) {
+      if(gravityBox.isCollide(collision)) return true;
+    }
+    return false;
+  }
 
+  void updateGraviry(double dt) {
+    isOnGround = IsOnGround();
+    if(!isOnGround)
+      velocity.y += graviry * dt;
+  }
+
+  void updateVelocity(double dt) {
+    velocity.x *= 0.99;
+
+    if(velocity.x.abs() <= 90) {
+      current = PlayerState.idle;
+      velocity.x = 0;
+    }
+
+    // print(velocity.x.abs());
+
+    updateGraviry(dt);
   }
 
   void loadAnimation() {
     animations = {
-      PlayerState.idle: createAnimation('Knight/Idle.png', 4, 0.2),
+      PlayerState.idle: createAnimation('Knight/Idle.png', 4, 0.17),
       PlayerState.run: createAnimation('Knight/Run.png', 7, 0.09),
       PlayerState.attack1: createAnimation('Knight/Attack 1.png', 5, 0.08),
     };
@@ -146,7 +184,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   }
 
   void updatePosition(double dt) {
-
     position.x += velocity.x * dt;
     collision("x");
     position.y += velocity.y * dt;
@@ -161,6 +198,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
       if(direction == "y") {
         if(velocity.y > 0) {
           position.y = collision.top - hitbox.height/2;
+          isOnGround = true;
         } else if (velocity.y < 0) {
           position.y = collision.bottom + hitbox.height/2 + 1;
         }

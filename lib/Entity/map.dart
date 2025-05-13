@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:flutter_game/Entity/Player.dart';
+import 'package:flutter_game/Entity/player.dart';
 import 'package:flutter_game/Entity/rect.dart';
 
 import 'RectBox.dart';

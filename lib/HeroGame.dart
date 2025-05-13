@@ -6,10 +6,10 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:flutter_game/Entity/Backgroud.dart';
+import 'package:flutter_game/Entity/background.dart';
 import 'package:flutter_game/Entity/map.dart';
 
-import 'Entity/Player.dart';
+import 'Entity/player.dart';
 
 class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection {
   late final CameraComponent cameraComponent;

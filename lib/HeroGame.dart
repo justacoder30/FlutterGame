@@ -27,6 +27,11 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     await loadWorld();
     setCamera();
 
+    addAll([
+      cameraComponent,
+      mapGame,
+    ]);
+
     return super.onLoad();
   }
   Future<void> loadWorld() async {
@@ -50,12 +55,6 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
           mapGame.getHeight() - camSize.y/2),
     );
     cameraComponent.follow(player);
-
-    addAll([
-      cameraComponent,
-      mapGame,
-    ]);
-
 
   }
 }

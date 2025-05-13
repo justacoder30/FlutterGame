@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'HeroGame.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Flame.device.fullScreen();
-  Flame.device.setLandscape();
+  await Flame.device.fullScreen();
+  await Flame.device.setLandscape();
 
   HeroGame game = HeroGame();
   runApp(GameWidget(game: game));

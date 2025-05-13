@@ -1,42 +1,61 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_game/Entity/RectBox.dart';
 import 'package:flutter_game/HeroGame.dart';
-
-enum PlayerDirection {
-  left,
-  right,
-  up,
-  down,
-  none
-}
 
 enum PlayerState {
   idle,
   run,
   fall,
-  attack,
+  attack1,
+  attack2,
+  attack3,
   jump
 }
 
-class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler{
-  Vector2 velocity = Vector2.zero();
+class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler, CollisionCallbacks {
   final double graviry = 1000;
   final double moveSpeed = 150;
   final double jump = 400;
+  final texSize = Vector2(128, 128);
+  Vector2 velocity = Vector2.zero();
+  List<RectBox> collisionsBox = [];
+
+  RectBox hitbox = RectBox(
+    position: Vector2(21, 64),
+    size: Vector2(22, 64),
+  );
+
+  RectBox attachHitBox = RectBox (
+    position: Vector2(43, 60),
+    size: Vector2(70, 68),
+  );
 
   bool isFacingRight = true;
-  PlayerDirection direction = PlayerDirection.none;
-
-
   Player(Vector2 pos) : super(position: pos);
 
   @override
   FutureOr<void> onLoad() {
     // TODO: implement onLoad
+    hitbox.debugMode = true;
+    attachHitBox.debugMode = true;
+
+    add(RectangleHitbox(
+      position: hitbox.position,
+      size: hitbox.size
+    ));
+    add(RectangleHitbox(
+        position: attachHitBox.position,
+        size: attachHitBox.size
+    ));
     loadAnimation();
+    // anchor = Anchor(0.1640625, 0.5);
+    anchor = Anchor(0.25, 0.75);
+    // anchor = Anchor.topLeft;
 
     return super.onLoad();
   }
@@ -46,6 +65,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     // TODO: implement update
     updateVelocity(dt);
 
+    updatePosition(dt);
     super.update(dt);
   }
 
@@ -58,16 +78,36 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     final isSKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyS);
     final isWKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyW);
     final isFKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyF);
+    final isJKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyJ);
 
+    // velocity.x *= 0.05;
     if (isFKeyPressed) {
       velocity.x = 0;
       velocity.y = 0;
+      current = PlayerState.idle;
     }
+
+    if (isJKeyPressed) {
+      current = PlayerState.attack1;
+    }
+
     if (isAKeyPressed) {
-      velocity.x = -100;
+      velocity.x = -moveSpeed;
+      current = PlayerState.run;
+      if (isFacingRight) {
+        flipHorizontally();
+        // position.x += hitbox.width;
+        isFacingRight = false;
+      }
     }
     if (isDKeyPressed) {
-      velocity.x = 100;
+      velocity.x = moveSpeed;
+      current = PlayerState.run;
+      if (!isFacingRight) {
+        flipHorizontally();
+        // position.x -= hitbox.width;
+        isFacingRight = true;
+      }
     }
     if (isWKeyPressed) {
       velocity.y = -100;
@@ -81,37 +121,59 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   }
 
   void updateVelocity(double dt) {
-    position += velocity * dt;
+
   }
 
   void loadAnimation() {
     animations = {
-      PlayerState.idle: createAnimation(
-          'Player/Idle.png',
-          10,
-          0.05,
-          Vector2(120, 80)
-      ),
-      PlayerState.run: createAnimation(
-          'Player/Run.png',
-          10,
-          0.04,
-          Vector2(120, 80)
-      ),
-
+      PlayerState.idle: createAnimation('Knight/Idle.png', 4, 0.2),
+      PlayerState.run: createAnimation('Knight/Run.png', 7, 0.09),
+      PlayerState.attack1: createAnimation('Knight/Attack 1.png', 5, 0.08),
     };
 
     current = PlayerState.idle;
   }
 
-  SpriteAnimation createAnimation(String dir, int amount, double stepTime, Vector2 texSize) {
+  SpriteAnimation createAnimation(String dir, int amount, double stepTime) {
     Image image  = game.images.fromCache(dir);
     SpriteAnimationData data = SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: stepTime,
-        textureSize: texSize
+        textureSize: texSize,
     );
 
     return SpriteAnimation.fromFrameData(image, data);
+  }
+
+  void updatePosition(double dt) {
+
+    position.x += velocity.x * dt;
+    collision("x");
+    position.y += velocity.y * dt;
+    collision("y");
+  }
+
+  void collision(String direction) {
+    hitbox.position = Vector2(position.x - hitbox.width/2, position.y - hitbox.height/2);
+    for (var collision in collisionsBox) {
+      if (!hitbox.isCollide(collision)) continue;
+
+      if(direction == "y") {
+        if(velocity.y > 0) {
+          position.y = collision.top - hitbox.height/2;
+        } else if (velocity.y < 0) {
+          position.y = collision.bottom + hitbox.height/2 + 1;
+        }
+        velocity.y = 0;
+      }else if(direction == "x") {
+        if(velocity.x > 0) {
+          position.x = collision.left - hitbox.width/2;
+        } else if (velocity.x < 0) {
+          position.x = collision.right + hitbox.width/2;
+        }
+        velocity.x = 0;
+      }
+
+    }
   }
 }

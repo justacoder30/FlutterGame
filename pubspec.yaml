@@ -63,7 +63,9 @@ flutter:
   assets:
     - assets/audio/
     - assets/tiles/
+    - assets/images/Background/
     - assets/images/Player/
+    - assets/images/Knight/
     - assets/images/Tileset/
 
 #     - images/a_dot_burr.jpeg

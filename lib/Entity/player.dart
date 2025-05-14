@@ -21,7 +21,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   final double graviry = 1000;
   // final double moveSpeed = 150;
   final double moveSpeed = 300;
-  final double jump = 400;
+  final double jump = 450;
   final texSize = Vector2(128, 128);
   bool isOnGround = false;
   Vector2 velocity = Vector2.zero();

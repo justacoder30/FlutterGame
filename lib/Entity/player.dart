@@ -35,7 +35,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
 
   RectBox gravityBox = RectBox(
     position: Vector2(21, 128),
-    size: Vector2(22, 1)
+    size: Vector2(22, 3)
   );
 
   Player(Vector2 pos) {
@@ -46,10 +46,10 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   FutureOr<void> onLoad() {
     // TODO: implement onLoad
 
-    add(RectangleHitbox(
-      position: hitbox.position,
-      size: hitbox.size
-    ));
+    // add(RectangleHitbox(
+    //   position: hitbox.position,
+    //   size: hitbox.size
+    // ));
 
     add(RectangleHitbox(
         position: gravityBox.position,
@@ -109,13 +109,13 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     updateGraviry(dt);
     velocity.x = 0;
 
-    if(game.joystick.delta.x > 0) {
+    if(game.joystick.delta.x >= game.joystick.knobRadius/2) {
       velocity.x = moveSpeed;
       if (!isFacingRight) {
         flipHorizontally();
         isFacingRight = true;
       }
-    } else if (game.joystick.delta.x < 0) {
+    } else if (game.joystick.delta.x <= - game.joystick.knobRadius/2) {
       velocity.x = -moveSpeed;
       if (isFacingRight) {
         flipHorizontally();

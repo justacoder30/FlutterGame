@@ -19,13 +19,15 @@ class MapGame extends World {
   FutureOr<void> onLoad() async {
     player.position = Vector2(250, 130);
 
-    addCollision();
-    addObjects();
-
     addAll([
       map,
       player,
     ]);
+
+    addCollision();
+    addObjects();
+
+
 
     return super.onLoad();
   }
@@ -49,6 +51,7 @@ class MapGame extends World {
         size: Vector2(collision.width, collision.height),
       );
       collisions.add(block);
+      add(block);
     }
   }
 

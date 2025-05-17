@@ -24,7 +24,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
   // final Vector2 camSize = Vector2(560, 315);
   //20:9
   final Vector2 camSize = Vector2(700, 315);
-  late HudButtonComponent btn;
+  late HudButtonComponent jump_btn;
   final List<String> level = ['map1'];
 
   @override
@@ -34,7 +34,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
 
     await loadWorld();
     setJoyTick();
-    setBtn();
+    setJumpBtn();
     setCamera();
 
     addAll([
@@ -72,7 +72,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     cameraComponent.follow(player);
 
     cameraComponent.viewport.add(joystick);
-    cameraComponent.viewport.add(btn);
+    cameraComponent.viewport.add(jump_btn);
   }
 
   void setJoyTick() {
@@ -81,19 +81,18 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     joystick = JoystickComponent(
       knob: CircleComponent(radius: 15, paint: knobPaint),
       background: CircleComponent(radius: 50, paint: backgroundPaint),
-      margin: const EdgeInsets.only(left: 20, bottom: 20),
+      margin: const EdgeInsets.only(left: 40, bottom: 40),
     );
   }
 
-  void setBtn() {
-    final knobPaint = BasicPalette.white.withAlpha(100).paint();
-    final backgroundPaint = BasicPalette.white.withAlpha(50).paint();
-    final double size = 40;
-    btn = HudButtonComponent(
-      // size: Vector2(20, 20),
-      margin: const EdgeInsets.only(right: 20, bottom: 20),
-      button: CircleComponent(radius: size, paint: knobPaint),
-      buttonDown: CircleComponent(radius: size, paint: backgroundPaint),
+  void setJumpBtn() {
+    final btn  = BasicPalette.white.withAlpha(100).paint();
+    final btnDown = BasicPalette.white.withAlpha(50).paint();
+    final double size = 50;
+    jump_btn = HudButtonComponent(
+      margin: const EdgeInsets.only(right: 40, bottom: 30),
+      button: CircleComponent(radius: size, paint: btn),
+      buttonDown: CircleComponent(radius: size, paint: btnDown),
       onPressed: () {
         if(player.isOnGround) {
           player.velocity.y = -player.jump;

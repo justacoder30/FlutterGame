@@ -25,7 +25,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
   //20:9
   final Vector2 camSize = Vector2(700, 315);
   late HudButtonComponent jump_btn;
-  final List<String> level = ['map1'];
+  final List<String> level = ['map1', 'map2'];
 
   @override
   FutureOr<void> onLoad() async {
@@ -46,7 +46,8 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     return super.onLoad();
   }
   Future<void> loadWorld() async {
-    tiledMap = await TiledComponent.load('${level[0]}.tmx', Vector2.all(16));
+    // tiledMap = await TiledComponent.load('${level[1]}.tmx', Vector2.all(16));
+    tiledMap = await TiledComponent.load('map2.tmx', Vector2.all(16));
     mapGame = MapGame(tiledMap, player);
   }
 

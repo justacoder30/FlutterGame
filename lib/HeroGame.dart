@@ -5,7 +5,10 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
+import 'package:flame/palette.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_game/Entity/background.dart';
 import 'package:flutter_game/Entity/map.dart';
 
@@ -15,8 +18,13 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
   late final CameraComponent cameraComponent;
   late MapGame mapGame;
   late TiledComponent tiledMap;
+  late JoystickComponent joystick;
   late Player player = Player(Vector2(0, 0));
-  final Vector2 camSize = Vector2(560, 315);
+  //16:9
+  // final Vector2 camSize = Vector2(560, 315);
+  //20:9
+  final Vector2 camSize = Vector2(700, 315);
+  late HudButtonComponent btn;
   final List<String> level = ['map1'];
 
   @override
@@ -25,11 +33,14 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     await images.loadAllImages();
 
     await loadWorld();
+    setJoyTick();
+    setBtn();
     setCamera();
 
     addAll([
       cameraComponent,
       mapGame,
+      // btn,
     ]);
 
     return super.onLoad();
@@ -44,17 +55,50 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
         width: camSize.x,
         height: camSize.y,
         world: mapGame,
-        backdrop: Background(),
+        backdrop: Background(size: camSize),
     );
+
     cameraComponent.viewfinder.anchor = Anchor.center;
+
     cameraComponent.setBounds(
       Rectangle.fromLTRB(
           camSize.x/2,
           camSize.y/2,
           mapGame.getWidth() - camSize.x/2,
-          mapGame.getHeight() - camSize.y/2),
+          mapGame.getHeight() - camSize.y/2
+      ),
     );
+
     cameraComponent.follow(player);
 
+    cameraComponent.viewport.add(joystick);
+    cameraComponent.viewport.add(btn);
+  }
+
+  void setJoyTick() {
+    final knobPaint = BasicPalette.white.withAlpha(100).paint();
+    final backgroundPaint = BasicPalette.white.withAlpha(50).paint();
+    joystick = JoystickComponent(
+      knob: CircleComponent(radius: 15, paint: knobPaint),
+      background: CircleComponent(radius: 50, paint: backgroundPaint),
+      margin: const EdgeInsets.only(left: 20, bottom: 20),
+    );
+  }
+
+  void setBtn() {
+    final knobPaint = BasicPalette.white.withAlpha(100).paint();
+    final backgroundPaint = BasicPalette.white.withAlpha(50).paint();
+    final double size = 40;
+    btn = HudButtonComponent(
+      // size: Vector2(20, 20),
+      margin: const EdgeInsets.only(right: 20, bottom: 20),
+      button: CircleComponent(radius: size, paint: knobPaint),
+      buttonDown: CircleComponent(radius: size, paint: backgroundPaint),
+      onPressed: () {
+        if(player.isOnGround) {
+          player.velocity.y = -player.jump;
+        }
+      },
+    );
   }
 }

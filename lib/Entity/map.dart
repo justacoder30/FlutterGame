@@ -4,7 +4,6 @@ import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter_game/Entity/player.dart';
-import 'package:flutter_game/Entity/rect.dart';
 
 import 'RectBox.dart';
 
@@ -26,7 +25,6 @@ class MapGame extends World {
     addAll([
       map,
       player,
-      RectangleCollidable(Vector2(30, 30)),
     ]);
 
     return super.onLoad();
@@ -41,17 +39,16 @@ class MapGame extends World {
   }
 
   void addCollision() {
-    final boxs = map.tileMap.getLayer<ObjectGroup>('Collision');
+    final Collisions = map.tileMap.getLayer<ObjectGroup>('Collision');
 
-    if (boxs == null) return;
+    if (Collisions == null) return;
 
-    for (var box in boxs.objects) {
+    for (var collision in Collisions.objects) {
       final block = RectBox(
-        position: Vector2(box.x, box.y),
-        size: Vector2(box.width, box.height),
+        position: Vector2(collision.x, collision.y),
+        size: Vector2(collision.width, collision.height),
       );
       collisions.add(block);
-      add(block);
     }
   }
 
@@ -62,7 +59,6 @@ class MapGame extends World {
 
     for (var pos in position.objects) {
       player.position = Vector2(pos.x, pos.y);
-      player.collisionsBox = collisions;
     }
   }
 }

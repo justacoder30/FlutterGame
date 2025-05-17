@@ -6,14 +6,13 @@ import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_game/Entity/RectBox.dart';
 import 'package:flutter_game/HeroGame.dart';
+import 'package:flutter_game/State/PlayerState/IdleState.dart';
+import 'package:flutter_game/State/PlayerState/PlayerState.dart';
 
-enum PlayerState {
+enum State {
   idle,
   run,
   fall,
-  attack1,
-  attack2,
-  attack3,
   jump
 }
 
@@ -24,17 +23,14 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   final double jump = 450;
   final texSize = Vector2(128, 128);
   bool isOnGround = false;
+  bool isFacingRight = true;
+  bool isJump = false;
   Vector2 velocity = Vector2.zero();
-  List<RectBox> collisionsBox = [];
+  PlayerState state = IdleState();
 
   RectBox hitbox = RectBox(
     position: Vector2(21, 64),
     size: Vector2(22, 64),
-  );
-
-  RectBox attachBox = RectBox (
-    position: Vector2(43, 60),
-    size: Vector2(70, 68),
   );
 
   RectBox gravityBox = RectBox(
@@ -42,8 +38,9 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     size: Vector2(22, 1)
   );
 
-  bool isFacingRight = true;
-  Player(Vector2 pos) : super(position: pos);
+  Player(Vector2 pos) {
+    position = Vector2(pos.x + hitbox.width, pos.y + hitbox.height);
+  }
 
   @override
   FutureOr<void> onLoad() {
@@ -52,11 +49,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     add(RectangleHitbox(
       position: hitbox.position,
       size: hitbox.size
-    ));
-
-    add(RectangleHitbox(
-        position: attachBox.position,
-        size: attachBox.size
     ));
 
     add(RectangleHitbox(
@@ -76,6 +68,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   void update(double dt) {
     // TODO: implement update
     updateVelocity(dt);
+    updateState();
     updatePosition(dt);
     super.update(dt);
   }
@@ -84,51 +77,10 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     // TODO: implement onKeyEvent
 
-    final isAKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyA);
-    final isDKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD);
-    final isSKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyS);
-    final isWKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyW);
-    final isFKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyF);
-    final isJKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyJ);
     final isSpacePressed = keysPressed.contains(LogicalKeyboardKey.space);
-
-    print(keysPressed.contains(LogicalKeyboardKey.keyD));
-    if (isFKeyPressed) {
-      velocity.x = 0;
-      velocity.y = 0;
-      current = PlayerState.idle;
-    }
-
-    if (isJKeyPressed) {
-      current = PlayerState.attack1;
-    }
-
-    if (isAKeyPressed) {
-      velocity.x = -moveSpeed;
-      current = PlayerState.run;
-      if (isFacingRight) {
-        flipHorizontally();
-        isFacingRight = false;
-      }
-    }
-    if (isDKeyPressed) {
-      velocity.x = moveSpeed;
-      current = PlayerState.run;
-      if (!isFacingRight) {
-        flipHorizontally();
-        isFacingRight = true;
-      }
-    }
 
     if (isSpacePressed && isOnGround) {
       velocity.y = -jump;
-    }
-
-    if (isWKeyPressed) {
-      velocity.y = -100;
-    }
-    if (isSKeyPressed) {
-      velocity.y = 100;
     }
 
 
@@ -137,7 +89,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
 
   bool IsOnGround() {
     gravityBox.position = Vector2(position.x - hitbox.width/2, position.y + hitbox.height/2);
-    for(var collision in collisionsBox) {
+    for(var collision in game.mapGame.collisions) {
       if(gravityBox.isCollide(collision)) return true;
     }
     return false;
@@ -149,35 +101,48 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
       velocity.y += graviry * dt;
   }
 
-  void updateVelocity(double dt) {
-    velocity.x *= 0.99;
+  void updateState() {
+    state = state.update(this);
+  }
 
-    if(velocity.x.abs() <= 90) {
-      current = PlayerState.idle;
-      velocity.x = 0;
+  void updateVelocity(double dt) {
+    updateGraviry(dt);
+    velocity.x = 0;
+
+    if(game.joystick.delta.x > 0) {
+      velocity.x = moveSpeed;
+      if (!isFacingRight) {
+        flipHorizontally();
+        isFacingRight = true;
+      }
+    } else if (game.joystick.delta.x < 0) {
+      velocity.x = -moveSpeed;
+      if (isFacingRight) {
+        flipHorizontally();
+        isFacingRight = false;
+      }
     }
 
-    // print(velocity.x.abs());
-
-    updateGraviry(dt);
   }
 
   void loadAnimation() {
     animations = {
-      PlayerState.idle: createAnimation('Knight/Idle.png', 4, 0.17),
-      PlayerState.run: createAnimation('Knight/Run.png', 7, 0.09),
-      PlayerState.attack1: createAnimation('Knight/Attack 1.png', 5, 0.08),
+      State.idle: createAnimation('Knight/Idle.png', 4, 0.17, true),
+      State.run: createAnimation('Knight/Run.png', 7, 0.09, true),
+      State.fall: createAnimation('Knight/Fall.png', 4, 0.135, false),
+      State.jump: createAnimation('Knight/Jump.png', 2, 0.12, false),
     };
 
-    current = PlayerState.idle;
+    current = State.idle;
   }
 
-  SpriteAnimation createAnimation(String dir, int amount, double stepTime) {
+  SpriteAnimation createAnimation(String dir, int amount, double stepTime, bool loop) {
     Image image  = game.images.fromCache(dir);
     SpriteAnimationData data = SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: stepTime,
         textureSize: texSize,
+        loop: loop,
     );
 
     return SpriteAnimation.fromFrameData(image, data);
@@ -192,7 +157,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
 
   void collision(String direction) {
     hitbox.position = Vector2(position.x - hitbox.width/2, position.y - hitbox.height/2);
-    for (var collision in collisionsBox) {
+    for (var collision in game.mapGame.collisions) {
       if (!hitbox.isCollide(collision)) continue;
 
       if(direction == "y") {

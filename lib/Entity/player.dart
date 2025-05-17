@@ -46,10 +46,10 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   FutureOr<void> onLoad() {
     // TODO: implement onLoad
 
-    // add(RectangleHitbox(
-    //   position: hitbox.position,
-    //   size: hitbox.size
-    // ));
+    add(RectangleHitbox(
+      position: hitbox.position,
+      size: hitbox.size
+    ));
 
     add(RectangleHitbox(
         position: gravityBox.position,

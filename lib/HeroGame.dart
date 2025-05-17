@@ -31,6 +31,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
   FutureOr<void> onLoad() async {
     // TODO: implement onLoad
     await images.loadAllImages();
+    debugMode = true;
 
     await loadWorld();
     setJoyTick();
@@ -46,8 +47,8 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     return super.onLoad();
   }
   Future<void> loadWorld() async {
-    // tiledMap = await TiledComponent.load('${level[1]}.tmx', Vector2.all(16));
-    tiledMap = await TiledComponent.load('map2.tmx', Vector2.all(16));
+    tiledMap = await TiledComponent.load('${level[1]}.tmx', Vector2.all(16));
+    // tiledMap = await TiledComponent.load('map4.tmx', Vector2.all(16));
     mapGame = MapGame(tiledMap, player);
   }
 

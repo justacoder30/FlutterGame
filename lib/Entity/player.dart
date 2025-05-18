@@ -153,6 +153,16 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     collision("x");
     position.y += velocity.y * dt;
     collision("y");
+    // //C1: Giới hạn vị trí trong map
+    // position.clamp(
+    //   Vector2(0, 0),
+    //   Vector2(game.mapGame.getWidth() - hitbox.width, game.mapGame.getHeight() - hitbox.height),
+    // );
+    //C2  Reset khi rơi khỏi bản đồ
+    if (position.y > game.mapGame.getHeight() + 200) {
+      position = Vector2(100, 100);
+      velocity = Vector2.zero();
+    }
   }
 
   void collision(String direction) {

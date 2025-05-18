@@ -47,7 +47,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     return super.onLoad();
   }
   Future<void> loadWorld() async {
-    tiledMap = await TiledComponent.load('${level[0]}.tmx', Vector2.all(16));
+    tiledMap = await TiledComponent.load('${level[1]}.tmx', Vector2.all(16));
     // tiledMap = await TiledComponent.load('map4.tmx', Vector2.all(16));
     mapGame = MapGame(tiledMap, player);
   }

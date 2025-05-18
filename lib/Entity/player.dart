@@ -19,7 +19,7 @@ enum State {
 class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler, CollisionCallbacks {
   final double graviry = 1000;
   // final double moveSpeed = 150;
-  final double moveSpeed = 300;
+  final double moveSpeed = 200;
   final double jump = 450;
   final texSize = Vector2(128, 128);
   bool isOnGround = false;

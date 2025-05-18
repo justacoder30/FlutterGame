@@ -186,7 +186,7 @@
   <object id="67" x="6464" y="640" width="160" height="320"/>
   <object id="69" x="464" y="752" width="64" height="208"/>
  </objectgroup>
- <objectgroup id="2" name="PlayerPosition" locked="1">
-  <object id="1" x="296" y="427" width="72" height="97"/>
+ <objectgroup id="2" name="PlayerPosition">
+  <object id="1" x="720" y="32" width="72" height="97"/>
  </objectgroup>
 </map>

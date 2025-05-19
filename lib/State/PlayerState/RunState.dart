@@ -1,15 +1,24 @@
-import 'package:flutter_game/State/PlayerState/IdleState.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 import '../../Entity/player.dart';
 import 'FallState.dart';
+import 'HurtState.dart';
+import 'IdleState.dart';
 import 'JumpState.dart';
-import 'PlayerState.dart';
+import 'StateOfPlayer.dart';
 
-class RunState implements PlayerState {
+class RunState implements StateOfPlayer {
   @override
-  PlayerState update(Player player) {
+  //error
+  StateOfPlayer update(Player player) {
     // TODO: implement update
     player.current = State.run;
+
+    if(player.isHit) {
+      player.hp -= player.damageTaken;
+      player.hitSound.start(volume: 1);
+      return Hurtstate();
+    }
 
     if (player.velocity.y < 0){
       return JumpState();
@@ -22,7 +31,6 @@ class RunState implements PlayerState {
     if (player.velocity.x == 0) {
       return IdleState();
     }
-
     return this;
   }
 

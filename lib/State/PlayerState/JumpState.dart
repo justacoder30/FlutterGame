@@ -1,12 +1,13 @@
 import 'package:flutter_game/Entity/player.dart';
 import 'package:flutter_game/State/PlayerState/FallState.dart';
-import 'package:flutter_game/State/PlayerState/PlayerState.dart';
+import 'package:flutter_game/State/PlayerState/StateOfPlayer.dart';
 
-class JumpState implements PlayerState {
+class JumpState implements StateOfPlayer {
   @override
-  PlayerState update(Player player) {
+  StateOfPlayer update(Player player) {
     // TODO: implement update
     player.current = State.jump;
+    player.isHit = false;
 
     if (player.velocity.y > 0) {
       return Fallstate();

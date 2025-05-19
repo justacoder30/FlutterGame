@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flutter_game/Entity/Enemy.dart';
+import 'package:flutter_game/Entity/Flag.dart';
+import 'package:flutter_game/Entity/Heart.dart';
 import 'package:flutter_game/Entity/player.dart';
 
+import 'Coin.dart';
 import 'RectBox.dart';
 
 class MapGame extends World {
@@ -12,6 +16,7 @@ class MapGame extends World {
   late Player player;
   late TiledComponent map;
   List<RectBox> collisions = [];
+  List<String> object_positions = ["PlayerPosition", "CoinPosition", "EnemyPosition", "HeartPosition", "FlagPostion"];
 
   MapGame(this.map, this.player);
 
@@ -26,8 +31,6 @@ class MapGame extends World {
 
     addCollision();
     addObjects();
-
-
 
     return super.onLoad();
   }
@@ -56,12 +59,40 @@ class MapGame extends World {
   }
 
   void addObjects() {
-    final position = map.tileMap.getLayer<ObjectGroup>("PlayerPosition");
+    for (var obj_pos in object_positions) {
+      final position = map.tileMap.getLayer<ObjectGroup>(obj_pos);
 
-    if (position == null) return;
+      if (position == null) return;
 
-    for (var pos in position.objects) {
-      player.position = Vector2(pos.x, pos.y);
+      if (obj_pos == "PlayerPosition") {
+        for (var pos in position.objects) {
+          player.position = Vector2(pos.x + player.hitbox.width/2, pos.y + player.hitbox.height/2);
+        }
+      } else if (obj_pos == "CoinPosition") {
+        for (var pos in position.objects) {
+          add(
+              Coin(position: pos.position)
+          );
+        }
+      } else if (obj_pos == "EnemyPosition") {
+        for (var pos in position.objects) {
+          add(
+              Enemy(pos.position)
+          );
+        }
+      } else if (obj_pos == "HeartPosition") {
+        for (var pos in position.objects) {
+          add(
+              Heart(position: pos.position)
+          );
+        }
+      } else if (obj_pos == "FlagPostion") {
+        for (var pos in position.objects) {
+          add(
+              Flag(position: pos.position)
+          );
+        }
+      }
     }
   }
 }

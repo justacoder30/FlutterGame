@@ -7,6 +7,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_game/Entity/background.dart';
@@ -30,10 +31,11 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
   @override
   FutureOr<void> onLoad() async {
     // TODO: implement onLoad
+    // debugMode = true;
     await images.loadAllImages();
-    debugMode = true;
 
     await loadWorld();
+    loadSound();
     setJoyTick();
     setJumpBtn();
     setCamera();
@@ -47,8 +49,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     return super.onLoad();
   }
   Future<void> loadWorld() async {
-    tiledMap = await TiledComponent.load('${level[1]}.tmx', Vector2.all(16));
-    // tiledMap = await TiledComponent.load('map4.tmx', Vector2.all(16));
+    tiledMap = await TiledComponent.load('${level[0]}.tmx', Vector2.all(16));
     mapGame = MapGame(tiledMap, player);
   }
 
@@ -101,5 +102,20 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
         }
       },
     );
+  }
+
+  Future<void> loadSound() async {
+    await FlameAudio.audioCache.loadAll([
+      'bg_music.ogg',
+      'landing_sound.mp3',
+      'coin_sound.mp3',
+      'Hit_sound.mp3',
+      'ButtonClick_sound.wav',
+      'GameLose_sound.wav',
+      'WinGame_sound.mp3',
+    ]);
+
+    await FlameAudio.bgm.initialize();
+    await FlameAudio.bgm.play('bg_music.ogg', volume: 0.2);
   }
 }

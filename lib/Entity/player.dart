@@ -3,30 +3,41 @@ import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_game/Entity/Coin.dart';
+import 'package:flutter_game/Entity/Heart.dart';
 import 'package:flutter_game/Entity/RectBox.dart';
 import 'package:flutter_game/HeroGame.dart';
 import 'package:flutter_game/State/PlayerState/IdleState.dart';
-import 'package:flutter_game/State/PlayerState/PlayerState.dart';
+import 'package:flutter_game/State/PlayerState/StateOfPlayer.dart';
 
 enum State {
   idle,
   run,
   fall,
-  jump
+  jump,
+  hurt,
+  die
 }
 
-class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler, CollisionCallbacks {
+class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler, CollisionCallbacks{
   final double graviry = 1000;
-  // final double moveSpeed = 150;
   final double moveSpeed = 200;
   final double jump = 450;
   final texSize = Vector2(128, 128);
   bool isOnGround = false;
   bool isFacingRight = true;
   bool isJump = false;
+  bool isHit = false;
+  double hp = 50;
+  double damageTaken = 0;
   Vector2 velocity = Vector2.zero();
-  PlayerState state = IdleState();
+  StateOfPlayer state = IdleState();
+
+  late AudioPool hitSound;
+  late AudioPool collectSound;
+  late AudioPool landingSound;
 
   RectBox hitbox = RectBox(
     position: Vector2(21, 64),
@@ -39,27 +50,31 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   );
 
   Player(Vector2 pos) {
-    position = Vector2(pos.x + hitbox.width, pos.y + hitbox.height);
+    position = Vector2(pos.x + hitbox.width/2, pos.y + hitbox.height/2);
   }
 
   @override
-  FutureOr<void> onLoad() {
+  Future<void> onLoad() async {
     // TODO: implement onLoad
 
-    add(RectangleHitbox(
-      position: hitbox.position,
-      size: hitbox.size
-    ));
-
-    add(RectangleHitbox(
+    addAll([
+      RectangleHitbox(
+          position: hitbox.position,
+          size: hitbox.size,
+          collisionType: CollisionType.active
+      ),
+      RectangleHitbox(
         position: gravityBox.position,
-        size: gravityBox.size
-    ));
+        size: gravityBox.size,
+        collisionType: CollisionType.inactive
+      )
+    ]);
 
     loadAnimation();
+    loadSound();
     // anchor = Anchor(0.1640625, 0.5);
     anchor = Anchor(0.25, 0.75);
-    // anchor = Anchor.topLeft;
+
 
     return super.onLoad();
   }
@@ -71,6 +86,17 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     updateState();
     updatePosition(dt);
     super.update(dt);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    // TODO: implement onCollision
+    if(other is Heart || other is Coin) {
+      collectSound.start(volume: 0.7);
+      other.removeFromParent();
+    }
+
+    super.onCollision(intersectionPoints, other);
   }
 
   @override
@@ -87,6 +113,11 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     return super.onKeyEvent(event, keysPressed);
   }
 
+  void beingAttacked(double damage) {
+    isHit = true;
+    damageTaken = damage;
+  }
+
   bool IsOnGround() {
     gravityBox.position = Vector2(position.x - hitbox.width/2, position.y + hitbox.height/2);
     for(var collision in game.mapGame.collisions) {
@@ -97,8 +128,8 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
 
   void updateGraviry(double dt) {
     isOnGround = IsOnGround();
-    if(!isOnGround)
-      velocity.y += graviry * dt;
+
+    if(!isOnGround) velocity.y += graviry * dt;
   }
 
   void updateState() {
@@ -131,6 +162,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
       State.run: createAnimation('Knight/Run.png', 7, 0.09, true),
       State.fall: createAnimation('Knight/Fall.png', 4, 0.135, false),
       State.jump: createAnimation('Knight/Jump.png', 2, 0.12, false),
+      State.hurt: createAnimation('Knight/Hurt.png', 2, 0.2, false),
     };
 
     current = State.idle;
@@ -160,7 +192,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     // );
     //C2  Reset khi rơi khỏi bản đồ
     if (position.y > game.mapGame.getHeight() + 200) {
-      position = Vector2(100, 100);
+      position = Vector2(200, 100);
       velocity = Vector2.zero();
     }
   }
@@ -175,7 +207,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
           position.y = collision.top - hitbox.height/2;
           isOnGround = true;
         } else if (velocity.y < 0) {
-          position.y = collision.bottom + hitbox.height/2 + 1;
+          position.y = collision.bottom + hitbox.height/2;
         }
         velocity.y = 0;
       }else if(direction == "x") {
@@ -188,5 +220,10 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
       }
 
     }
+  }
+
+  Future<void> loadSound() async {
+    hitSound = await FlameAudio.createPool('Hit_sound.mp3', maxPlayers: 5);
+    collectSound = await FlameAudio.createPool('coin_sound.mp3', maxPlayers: 10);
   }
 }

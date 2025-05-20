@@ -9,6 +9,7 @@ import 'package:flutter_game/Entity/Coin.dart';
 import 'package:flutter_game/Entity/Heart.dart';
 import 'package:flutter_game/Entity/RectBox.dart';
 import 'package:flutter_game/HeroGame.dart';
+import 'package:flutter_game/State/PlayerState/DeathState.dart';
 import 'package:flutter_game/State/PlayerState/IdleState.dart';
 import 'package:flutter_game/State/PlayerState/StateOfPlayer.dart';
 
@@ -18,7 +19,7 @@ enum State {
   fall,
   jump,
   hurt,
-  die
+  death
 }
 
 class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler, CollisionCallbacks{
@@ -30,7 +31,9 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   bool isFacingRight = true;
   bool isJump = false;
   bool isHit = false;
-  double hp = 50;
+  final double HP = 50;
+  late double currentHP;
+  late Vector2 spawnPos;
   double damageTaken = 0;
   Vector2 velocity = Vector2.zero();
   StateOfPlayer state = IdleState();
@@ -49,8 +52,11 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     size: Vector2(22, 3)
   );
 
-  Player(Vector2 pos) {
+  void setSpawnPoint(Vector2 pos) {
     position = Vector2(pos.x + hitbox.width/2, pos.y + hitbox.height/2);
+    spawnPos = position.clone();
+    currentHP = HP;
+    // spawnPos = position;
   }
 
   @override
@@ -79,24 +85,21 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     return super.onLoad();
   }
 
-  @override
-  void update(double dt) {
-    // TODO: implement update
-    updateVelocity(dt);
-    updateState();
-    updatePosition(dt);
-    super.update(dt);
+  bool isOutOfMap() {
+    if(position.y > game.mapGame.getHeight()) {
+      currentHP = 0;
+      return true;
+    }
+    return false;
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    // TODO: implement onCollision
-    if(other is Heart || other is Coin) {
-      collectSound.start(volume: 0.7);
-      other.removeFromParent();
-    }
-
-    super.onCollision(intersectionPoints, other);
+  Future<void> update(double dt) async {
+    // TODO: implement update
+    updateState();
+    updatePosition(dt);
+    updateVelocity(dt);
+    super.update(dt);
   }
 
   @override
@@ -133,6 +136,10 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   }
 
   void updateState() {
+    if(currentHP <= 0  || isOutOfMap()) {
+      state = DeathState();
+    }
+
     state = state.update(this);
   }
 
@@ -163,6 +170,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
       State.fall: createAnimation('Knight/Fall.png', 4, 0.135, false),
       State.jump: createAnimation('Knight/Jump.png', 2, 0.12, false),
       State.hurt: createAnimation('Knight/Hurt.png', 2, 0.2, false),
+      State.death: createAnimation('Knight/Dead.png', 6, 0.1, false),
     };
 
     current = State.idle;
@@ -185,16 +193,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     collision("x");
     position.y += velocity.y * dt;
     collision("y");
-    // //C1: Giới hạn vị trí trong map
-    // position.clamp(
-    //   Vector2(0, 0),
-    //   Vector2(game.mapGame.getWidth() - hitbox.width, game.mapGame.getHeight() - hitbox.height),
-    // );
-    //C2  Reset khi rơi khỏi bản đồ
-    if (position.y > game.mapGame.getHeight() + 200) {
-      position = Vector2(200, 100);
-      velocity = Vector2.zero();
-    }
   }
 
   void collision(String direction) {
@@ -222,8 +220,21 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     }
   }
 
+  Future<void> beingHit() async {
+    currentHP -= damageTaken;
+    hitSound.start(volume: 1);
+    game.ui.removeHearts();
+  }
+
   Future<void> loadSound() async {
     hitSound = await FlameAudio.createPool('Hit_sound.mp3', maxPlayers: 5);
     collectSound = await FlameAudio.createPool('coin_sound.mp3', maxPlayers: 10);
+  }
+
+  void reSpawn() {
+    game.ui.removeHearts();
+    position = spawnPos.clone();
+    currentHP = HP;
+    game.ui.loadHearts();
   }
 }

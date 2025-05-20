@@ -6,8 +6,9 @@ import 'package:flame/components.dart';
 import 'package:flutter_game/Entity/player.dart';
 import 'package:flutter_game/HeroGame.dart';
 
-class Heart extends SpriteAnimationGroupComponent with HasGameReference<HeroGame> {
+class Heart extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, CollisionCallbacks {
   final texSize = Vector2(18, 14);
+  final score = 20;
 
   Heart({super.position});
 
@@ -38,5 +39,16 @@ class Heart extends SpriteAnimationGroupComponent with HasGameReference<HeroGame
     );
 
     return SpriteAnimation.fromFrameData(image, data);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    // TODO: implement onCollision
+    if(other is Player) {
+      game.player.collectSound.start(volume: 0.7);
+      game.score += score;
+      removeFromParent();
+    }
+    super.onCollision(intersectionPoints, other);
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter_game/Entity/Enemy.dart';
@@ -16,14 +15,12 @@ class MapGame extends World {
   late Player player;
   late TiledComponent map;
   List<RectBox> collisions = [];
-  List<String> object_positions = ["PlayerPosition", "CoinPosition", "EnemyPosition", "HeartPosition", "FlagPostion"];
+  List<String> object_positions = ["PlayerPosition", "CoinPosition", "EnemyPosition", "HeartPosition", "FlagPosition"];
 
   MapGame(this.map, this.player);
 
   @override
   FutureOr<void> onLoad() async {
-    player.position = Vector2(250, 130);
-
     addAll([
       map,
       player,
@@ -60,13 +57,14 @@ class MapGame extends World {
 
   void addObjects() {
     for (var obj_pos in object_positions) {
-      final position = map.tileMap.getLayer<ObjectGroup>(obj_pos);
+      var position = map.tileMap.getLayer<ObjectGroup>(obj_pos);
 
-      if (position == null) return;
+      if (position == null) continue;
 
       if (obj_pos == "PlayerPosition") {
         for (var pos in position.objects) {
           player.position = Vector2(pos.x + player.hitbox.width/2, pos.y + player.hitbox.height/2);
+          player.setSpawnPoint(pos.position);
         }
       } else if (obj_pos == "CoinPosition") {
         for (var pos in position.objects) {
@@ -86,7 +84,7 @@ class MapGame extends World {
               Heart(position: pos.position)
           );
         }
-      } else if (obj_pos == "FlagPostion") {
+      } else if (obj_pos == "FlagPosition") {
         for (var pos in position.objects) {
           add(
               Flag(position: pos.position)

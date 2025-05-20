@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="414" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="129">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="414" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="274">
  <tileset firstgid="1" source="tileset.tsx"/>
  <layer id="1" name="Terrain" width="414" height="60">
   <data encoding="csv">
@@ -130,7 +130,128 @@
 </data>
  </layer>
  <objectgroup id="2" name="PlayerPosition">
-  <object id="128" x="288" y="384" width="22" height="64"/>
+  <object id="273" x="288" y="272" width="22" height="64"/>
+ </objectgroup>
+ <objectgroup id="8" name="EnemyPosition" locked="1">
+  <object id="141" x="5632" y="528" width="16" height="48"/>
+  <object id="144" x="1184" y="752" width="16" height="48"/>
+  <object id="145" x="704" y="352" width="16" height="48"/>
+  <object id="146" x="1104" y="352" width="16" height="48"/>
+  <object id="147" x="1856" y="336" width="16" height="48"/>
+  <object id="148" x="2240" y="80" width="16" height="48"/>
+  <object id="149" x="2144" y="384" width="16" height="48"/>
+  <object id="151" x="2512" y="288" width="16" height="48"/>
+  <object id="152" x="2352" y="816" width="16" height="48"/>
+  <object id="153" x="2640" y="784" width="16" height="48"/>
+  <object id="154" x="3312" y="816" width="16" height="48"/>
+  <object id="155" x="3136" y="624" width="16" height="48"/>
+  <object id="156" x="3024" y="432" width="16" height="48"/>
+  <object id="157" x="3904" y="560" width="16" height="48"/>
+  <object id="158" x="3712" y="560" width="16" height="48"/>
+  <object id="159" x="2992" y="816" width="16" height="48"/>
+  <object id="160" x="2560" y="80" width="16" height="48"/>
+  <object id="161" x="3440" y="320" width="16" height="48"/>
+  <object id="162" x="3824" y="208" width="16" height="48"/>
+  <object id="163" x="4176" y="144" width="16" height="48"/>
+  <object id="164" x="4656" y="144" width="16" height="48"/>
+  <object id="165" x="4368" y="144" width="16" height="48"/>
+  <object id="166" x="5264" y="144" width="16" height="48"/>
+  <object id="167" x="4576" y="544" width="16" height="48"/>
+  <object id="168" x="5168" y="528" width="16" height="48"/>
+  <object id="169" x="5040" y="800" width="16" height="48"/>
+  <object id="170" x="4608" y="800" width="16" height="48"/>
+  <object id="171" x="5424" y="800" width="16" height="48"/>
+ </objectgroup>
+ <objectgroup id="9" name="CoinPosition">
+  <object id="172" x="816" y="352" width="16" height="16"/>
+  <object id="173" x="864" y="352" width="16" height="16"/>
+  <object id="175" x="1152" y="352" width="16" height="16"/>
+  <object id="176" x="1200" y="352" width="16" height="16"/>
+  <object id="181" x="1168" y="752" width="16" height="16"/>
+  <object id="182" x="1216" y="752" width="16" height="16"/>
+  <object id="183" x="1824" y="336" width="16" height="16"/>
+  <object id="184" x="1872" y="336" width="16" height="16"/>
+  <object id="185" x="2368" y="80" width="16" height="16"/>
+  <object id="186" x="2416" y="80" width="16" height="16"/>
+  <object id="189" x="2464" y="80" width="16" height="16"/>
+  <object id="190" x="2512" y="80" width="16" height="16"/>
+  <object id="191" x="960" y="304" width="16" height="16"/>
+  <object id="192" x="1008" y="304" width="16" height="16"/>
+  <object id="193" x="1772" y="174" width="16" height="16"/>
+  <object id="194" x="1820" y="174" width="16" height="16"/>
+  <object id="195" x="2512" y="496" width="16" height="16"/>
+  <object id="196" x="2560" y="496" width="16" height="16"/>
+  <object id="197" x="2336" y="496" width="16" height="16"/>
+  <object id="198" x="2384" y="496" width="16" height="16"/>
+  <object id="199" x="2384" y="288" width="16" height="16"/>
+  <object id="200" x="2432" y="288" width="16" height="16"/>
+  <object id="201" x="2544" y="288" width="16" height="16"/>
+  <object id="202" x="2592" y="288" width="16" height="16"/>
+  <object id="203" x="2976" y="432" width="16" height="16"/>
+  <object id="204" x="3024" y="432" width="16" height="16"/>
+  <object id="209" x="3072" y="432" width="16" height="16"/>
+  <object id="210" x="3120" y="432" width="16" height="16"/>
+  <object id="211" x="3056" y="144" width="16" height="16"/>
+  <object id="212" x="3104" y="144" width="16" height="16"/>
+  <object id="213" x="3152" y="144" width="16" height="16"/>
+  <object id="214" x="3200" y="144" width="16" height="16"/>
+  <object id="216" x="4336" y="144" width="16" height="16"/>
+  <object id="217" x="4320" y="112" width="16" height="16"/>
+  <object id="218" x="4368" y="112" width="16" height="16"/>
+  <object id="219" x="4384" y="144" width="16" height="16"/>
+  <object id="223" x="4480" y="144" width="16" height="16"/>
+  <object id="224" x="4528" y="144" width="16" height="16"/>
+  <object id="225" x="4512" y="112" width="16" height="16"/>
+  <object id="226" x="4560" y="112" width="16" height="16"/>
+  <object id="227" x="5184" y="144" width="16" height="16"/>
+  <object id="228" x="5232" y="144" width="16" height="16"/>
+  <object id="229" x="5216" y="112" width="16" height="16"/>
+  <object id="230" x="5264" y="112" width="16" height="16"/>
+  <object id="231" x="5280" y="144" width="16" height="16"/>
+  <object id="232" x="5328" y="144" width="16" height="16"/>
+  <object id="233" x="5312" y="112" width="16" height="16"/>
+  <object id="234" x="4688" y="544" width="16" height="16"/>
+  <object id="235" x="4736" y="544" width="16" height="16"/>
+  <object id="236" x="4784" y="544" width="16" height="16"/>
+  <object id="237" x="4832" y="544" width="16" height="16"/>
+  <object id="238" x="4880" y="544" width="16" height="16"/>
+  <object id="239" x="5152" y="528" width="16" height="16"/>
+  <object id="240" x="5200" y="528" width="16" height="16"/>
+  <object id="241" x="5248" y="528" width="16" height="16"/>
+  <object id="242" x="5296" y="528" width="16" height="16"/>
+  <object id="243" x="5344" y="528" width="16" height="16"/>
+  <object id="244" x="3792" y="208" width="16" height="16"/>
+  <object id="245" x="3840" y="208" width="16" height="16"/>
+  <object id="246" x="3888" y="208" width="16" height="16"/>
+  <object id="247" x="3936" y="208" width="16" height="16"/>
+  <object id="248" x="3984" y="208" width="16" height="16"/>
+  <object id="249" x="3824" y="560" width="16" height="16"/>
+  <object id="250" x="3872" y="560" width="16" height="16"/>
+  <object id="251" x="3920" y="560" width="16" height="16"/>
+  <object id="252" x="3968" y="560" width="16" height="16"/>
+  <object id="253" x="4016" y="560" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="10" name="HeartPosition">
+  <object id="254" x="1191" y="725" width="18" height="14"/>
+  <object id="255" x="982" y="280" width="18" height="14"/>
+  <object id="256" x="2480" y="288" width="18" height="14"/>
+  <object id="257" x="2448" y="496" width="18" height="14"/>
+  <object id="258" x="2048" y="672" width="18" height="14"/>
+  <object id="259" x="2112" y="672" width="18" height="14"/>
+  <object id="260" x="3040" y="816" width="18" height="14"/>
+  <object id="261" x="3120" y="816" width="18" height="14"/>
+  <object id="262" x="3184" y="816" width="18" height="14"/>
+  <object id="264" x="3047" y="405" width="18" height="14"/>
+  <object id="265" x="2998" y="403" width="18" height="14"/>
+  <object id="266" x="3098" y="401" width="18" height="14"/>
+  <object id="267" x="4432" y="144" width="18" height="14"/>
+  <object id="268" x="4416" y="112" width="18" height="14"/>
+  <object id="269" x="4464" y="112" width="18" height="14"/>
+  <object id="270" x="3865" y="185" width="18" height="14"/>
+  <object id="271" x="3917" y="182" width="18" height="14"/>
+ </objectgroup>
+ <objectgroup id="7" name="FlagPosition" locked="1">
+  <object id="140" x="6271.5" y="630.5" width="60" height="60"/>
  </objectgroup>
  <objectgroup id="6" name="Collision" locked="1">
   <object id="23" x="0" y="448" width="496" height="512"/>

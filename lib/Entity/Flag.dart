@@ -41,9 +41,11 @@ class Flag extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  Future<void> onCollision(Set<Vector2> intersectionPoints, PositionComponent other) async {
     // TODO: implement onCollision
-    // if(other is Player)
+    if(other is Player) {
+      game.overlays.add("GameOver");
+    }
     super.onCollision(intersectionPoints, other);
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flame_audio/flame_audio.dart';
 
 import '../../Entity/player.dart';
 import 'FallState.dart';
@@ -15,8 +14,7 @@ class RunState implements StateOfPlayer {
     player.current = State.run;
 
     if(player.isHit) {
-      player.hp -= player.damageTaken;
-      player.hitSound.start(volume: 1);
+      player.beingHit();
       return Hurtstate();
     }
 

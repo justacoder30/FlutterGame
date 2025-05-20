@@ -1,8 +1,7 @@
 import 'dart:async';
+import 'dart:ffi';
 
-import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -10,32 +9,47 @@ import 'package:flame/palette.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_game/Entity/UI.dart';
 import 'package:flutter_game/Entity/background.dart';
 import 'package:flutter_game/Entity/map.dart';
 
 import 'Entity/player.dart';
 
 class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection {
-  late final CameraComponent cameraComponent;
+  late CameraComponent cameraComponent;
   late MapGame mapGame;
+  late UI ui;
   late TiledComponent tiledMap;
   late JoystickComponent joystick;
-  late Player player = Player(Vector2(0, 0));
+  late HudButtonComponent jump_btn;
+  late Player player;
+  int score = 0;
   //16:9
   // final Vector2 camSize = Vector2(560, 315);
   //20:9
   final Vector2 camSize = Vector2(700, 315);
-  late HudButtonComponent jump_btn;
   final List<String> level = ['map1', 'map2'];
+  int currentLevel = 0;
 
   @override
   FutureOr<void> onLoad() async {
     // TODO: implement onLoad
     // debugMode = true;
     await images.loadAllImages();
+    await loadSound();
 
+    await loadGame();
+
+    return super.onLoad();
+  }
+
+  Future<void> loadNewGame() async {
+    removeAll(children);
+    await loadGame();
+  }
+
+  Future<void> loadGame() async {
     await loadWorld();
-    loadSound();
     setJoyTick();
     setJumpBtn();
     setCamera();
@@ -43,14 +57,25 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     addAll([
       cameraComponent,
       mapGame,
-      // btn,
     ]);
-
-    return super.onLoad();
   }
+
+  Future<void> loadNextGame() async {
+    removeAll(children);
+    currentLevel++;
+    if(currentLevel >= level.length) {
+      currentLevel = 0;
+      // return;
+    }
+    await loadGame();
+
+  }
+
   Future<void> loadWorld() async {
-    tiledMap = await TiledComponent.load('${level[0]}.tmx', Vector2.all(16));
+    player = Player();
+    tiledMap = await TiledComponent.load('${level[currentLevel]}.tmx', Vector2.all(16));
     mapGame = MapGame(tiledMap, player);
+    ui = UI();
   }
 
   void setCamera() {
@@ -74,8 +99,12 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
 
     cameraComponent.follow(player);
 
-    cameraComponent.viewport.add(joystick);
-    cameraComponent.viewport.add(jump_btn);
+
+    cameraComponent.viewport.addAll([
+      ui,
+      joystick,
+      jump_btn,
+    ]);
   }
 
   void setJoyTick() {

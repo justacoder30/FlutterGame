@@ -3,12 +3,23 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import 'HeroGame.dart';
+import 'Menu/GameOver.dart';
+import 'Menu/MainMenu.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.fullScreen();
   await Flame.device.setLandscape();
 
-  HeroGame game = HeroGame();
-  runApp(GameWidget(game: game));
+  HeroGame heroGame = HeroGame();
+  runApp(
+    GameWidget(
+      game: heroGame,
+      overlayBuilderMap: {
+        'MainMenu': (_, game) => MainMenu(game: heroGame),
+        'GameOver': (_, game) => GameOver(game: heroGame),
+      },
+      initialActiveOverlays: const ['MainMenu'],
+    ),
+  );
 }

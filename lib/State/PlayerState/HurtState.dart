@@ -3,7 +3,6 @@ import 'package:flutter_game/State/PlayerState/IdleState.dart';
 import 'package:flutter_game/State/PlayerState/JumpState.dart';
 import 'package:flutter_game/State/PlayerState/StateOfPlayer.dart';
 
-import 'StateOfPlayer.dart';
 
 class Hurtstate implements StateOfPlayer {
   @override

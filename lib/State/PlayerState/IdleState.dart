@@ -1,4 +1,3 @@
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter_game/Entity/player.dart';
 import 'package:flutter_game/State/PlayerState/HurtState.dart';
 import 'package:flutter_game/State/PlayerState/StateOfPlayer.dart';
@@ -14,8 +13,7 @@ class IdleState implements StateOfPlayer {
     player.current = State.idle;
 
     if(player.isHit) {
-      player.hp -= player.damageTaken;
-      player.hitSound.start(volume: 1);
+      player.beingHit();
       return Hurtstate();
     }
 

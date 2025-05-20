@@ -11,7 +11,7 @@ import 'package:flutter_game/HeroGame.dart';
 
 class Enemy extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, CollisionCallbacks {
   final double moveSpeed = 100;
-  final double damage = 10;
+  final double damage = 5;
   final texSize = Vector2(96, 64);
   bool isFacingRight = true;
   Vector2 velocity = Vector2.zero();

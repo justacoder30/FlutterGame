@@ -228,7 +228,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
 
   Future<void> loadSound() async {
     hitSound = await FlameAudio.createPool('Hit_sound.mp3', maxPlayers: 5);
-    collectSound = await FlameAudio.createPool('coin_sound.mp3', maxPlayers: 10);
+    collectSound = await FlameAudio.createPool('coin_sound.mp3', maxPlayers: 5);
   }
 
   void reSpawn() {

@@ -37,9 +37,22 @@ class UI extends PositionComponent with HasGameReference<HeroGame> {
     }
   }
 
+  Future<void> increaseHeart() async {
+    final newNumHeart = setNumHeart();
+    while(newNumHeart > numHeart) {
+      heartlist.add(
+        SpriteComponent(
+          sprite: await Sprite.load('Item/hearts.png'),
+          position: Vector2(texSize.x * numHeart-1, 0),
+          size: texSize
+        )
+      );
+      add(heartlist[numHeart++]);
+    }
+  }
+
   void removeHearts() {
     final newNumHeart = setNumHeart();
-    print((newNumHeart, numHeart));
     while (newNumHeart < numHeart ) {
       heartlist[--numHeart].removeFromParent();
       heartlist.removeAt(numHeart);

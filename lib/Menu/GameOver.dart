@@ -34,6 +34,7 @@ class GameOver extends StatelessWidget {
                   fontSize: 24,
                 ),
               ),
+              Text("Score: ${game.score}", style: TextStyle(color: whiteTextColor),),
               const SizedBox(height: 40),
               SizedBox(
                 width: 200,
@@ -47,7 +48,7 @@ class GameOver extends StatelessWidget {
                     backgroundColor: whiteTextColor,
                   ),
                   child: const Text(
-                    'Continute ?',
+                    'Continue ?',
                     style: TextStyle(
                       fontSize: 28.0,
                       color: blackTextColor,

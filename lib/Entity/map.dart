@@ -26,7 +26,7 @@ class MapGame extends World {
       player,
     ]);
 
-    addCollision();
+    await addCollision();
     addObjects();
 
     return super.onLoad();
@@ -40,12 +40,10 @@ class MapGame extends World {
     return map.height;
   }
 
-  void addCollision() {
+  Future<void> addCollision() async {
     final Collisions = map.tileMap.getLayer<ObjectGroup>('Collision');
 
-    if (Collisions == null) return;
-
-    for (var collision in Collisions.objects) {
+    for (var collision in Collisions!.objects) {
       final block = RectBox(
         position: Vector2(collision.x, collision.y),
         size: Vector2(collision.width, collision.height),

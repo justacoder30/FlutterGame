@@ -9,6 +9,7 @@ import 'package:flutter_game/HeroGame.dart';
 class Heart extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, CollisionCallbacks {
   final texSize = Vector2(18, 14);
   final score = 20;
+  final health = 10;
 
   Heart({super.position});
 
@@ -47,6 +48,8 @@ class Heart extends SpriteAnimationGroupComponent with HasGameReference<HeroGame
     if(other is Player) {
       game.player.collectSound.start(volume: 0.7);
       game.score += score;
+      game.player.currentHP += health;
+      game.ui.increaseHeart();
       removeFromParent();
     }
     super.onCollision(intersectionPoints, other);

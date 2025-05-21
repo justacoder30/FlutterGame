@@ -76,6 +76,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     tiledMap = await TiledComponent.load('${level[currentLevel]}.tmx', Vector2.all(16));
     mapGame = MapGame(tiledMap, player);
     ui = UI();
+    score = 0;
   }
 
   void setCamera() {

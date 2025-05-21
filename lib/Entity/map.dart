@@ -26,7 +26,7 @@ class MapGame extends World {
       player,
     ]);
 
-    await addCollision();
+    addCollision();
     addObjects();
 
     return super.onLoad();
@@ -40,7 +40,7 @@ class MapGame extends World {
     return map.height;
   }
 
-  Future<void> addCollision() async {
+  void addCollision() {
     final Collisions = map.tileMap.getLayer<ObjectGroup>('Collision');
 
     for (var collision in Collisions!.objects) {

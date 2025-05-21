@@ -189,7 +189,7 @@
  <objectgroup id="2" name="PlayerPosition" locked="1">
   <object id="211" x="4816" y="320" width="22" height="64"/>
  </objectgroup>
- <objectgroup id="7" name="EnemyPosition" locked="1">
+ <objectgroup id="7" name="EnemyPosition">
   <object id="75" x="688" y="560" width="16" height="48"/>
   <object id="77" x="768" y="816" width="16" height="48"/>
   <object id="78" x="896" y="144" width="16" height="48"/>
@@ -198,19 +198,19 @@
   <object id="81" x="1680" y="144" width="16" height="48"/>
   <object id="82" x="2176" y="144" width="16" height="48"/>
   <object id="83" x="2528" y="144" width="16" height="48"/>
-  <object id="84" x="3856" y="432" width="16" height="48"/>
-  <object id="85" x="4416" y="320" width="16" height="48"/>
+  <object id="84" x="3760" y="432" width="16" height="48"/>
+  <object id="85" x="4256" y="320" width="16" height="48"/>
   <object id="87" x="4000" y="816" width="16" height="48"/>
   <object id="88" x="3616" y="816" width="16" height="48"/>
-  <object id="89" x="4304" y="784" width="16" height="48"/>
+  <object id="89" x="4048" y="784" width="16" height="48"/>
   <object id="91" x="1792" y="800" width="16" height="48"/>
   <object id="92" x="2272" y="800" width="16" height="48"/>
-  <object id="93" x="1728" y="528" width="16" height="48"/>
+  <object id="93" x="1520" y="528" width="16" height="48"/>
   <object id="94" x="2208" y="544" width="16" height="48"/>
   <object id="95" x="1952" y="544" width="16" height="48"/>
   <object id="96" x="2992" y="560" width="16" height="48"/>
   <object id="97" x="2768" y="560" width="16" height="48"/>
-  <object id="188" x="3488" y="320" width="16" height="48"/>
+  <object id="188" x="3360" y="320" width="16" height="48"/>
  </objectgroup>
  <objectgroup id="6" name="CoinPosition" locked="1">
   <object id="106" x="752" y="832" width="16" height="16"/>

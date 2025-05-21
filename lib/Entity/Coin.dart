@@ -45,7 +45,7 @@ class Coin extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     // TODO: implement onCollision
     if(other is Player) {
-      game.player.collectSound.start(volume: 0.7);
+      // game.player.collectSound.start(volume: 0.7);
       game.score += score;
       removeFromParent();
     }

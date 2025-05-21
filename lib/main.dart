@@ -11,7 +11,7 @@ void main() async {
   await Flame.device.fullScreen();
   await Flame.device.setLandscape();
 
-  HeroGame heroGame = HeroGame();
+  HeroGame heroGame = await HeroGame();
   runApp(
     GameWidget(
       game: heroGame,

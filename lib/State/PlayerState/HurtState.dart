@@ -17,7 +17,7 @@ class Hurtstate implements StateOfPlayer {
       return JumpState();
     }
 
-    if (player.animationTicker!.isLastFrame) {
+    if (player.animationTicker!.done()) {
       return IdleState();
     }
 

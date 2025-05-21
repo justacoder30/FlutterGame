@@ -46,7 +46,7 @@ class Heart extends SpriteAnimationGroupComponent with HasGameReference<HeroGame
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     // TODO: implement onCollision
     if(other is Player) {
-      // game.player.collectSound.start(volume: 0.7);
+      game.collectSound.start(volume: 0.7);
       game.score += score;
       game.player.currentHP += health;
       game.ui.increaseHeart();

@@ -3,10 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_game/Entity/Coin.dart';
-import 'package:flutter_game/Entity/Heart.dart';
 import 'package:flutter_game/Entity/RectBox.dart';
 import 'package:flutter_game/HeroGame.dart';
 import 'package:flutter_game/State/PlayerState/DeathState.dart';
@@ -22,7 +19,7 @@ enum State {
   death
 }
 
-class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler, CollisionCallbacks{
+class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler{
   final double graviry = 1000;
   final double moveSpeed = 200;
   final double jump = 450;
@@ -37,10 +34,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   double damageTaken = 0;
   Vector2 velocity = Vector2.zero();
   StateOfPlayer state = IdleState();
-
-  late AudioPool hitSound;
-  late AudioPool collectSound;
-  late AudioPool landingSound;
 
   RectBox hitbox = RectBox(
     position: Vector2(21, 64),
@@ -77,7 +70,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     ]);
 
     loadAnimation();
-    loadSound();
     // anchor = Anchor(0.1640625, 0.5);
     anchor = Anchor(0.25, 0.75);
 
@@ -222,13 +214,8 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
 
   Future<void> beingHit() async {
     currentHP -= damageTaken;
-    hitSound.start(volume: 1);
+    game.hitSound.start(volume: 1);
     game.ui.removeHearts();
-  }
-
-  Future<void> loadSound() async {
-    hitSound = await FlameAudio.createPool('Hit_sound.mp3', maxPlayers: 5);
-    collectSound = await FlameAudio.createPool('coin_sound.mp3', maxPlayers: 5);
   }
 
   void reSpawn() {

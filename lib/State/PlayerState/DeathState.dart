@@ -10,8 +10,8 @@ class DeathState implements StateOfPlayer {
     player.velocity.x = 0;
     player.isHit = false;
 
-    if(player.animationTicker!.isLastFrame) {
-      player.reSpawn();
+    if(player.animationTicker!.done()) {
+      player.game.loadNewGame();
       return IdleState();
     }
 

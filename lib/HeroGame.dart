@@ -31,14 +31,16 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
   final List<String> level = ['map1', 'map2'];
   int currentLevel = 0;
 
+  late AudioPool hitSound;
+  late AudioPool collectSound;
+
   @override
   FutureOr<void> onLoad() async {
     // TODO: implement onLoad
     // debugMode = true;
     await images.loadAllImages();
-    await loadSound();
-
-    await loadGame();
+    await initSound();
+    loadGame();
 
     return super.onLoad();
   }
@@ -50,6 +52,8 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
 
   Future<void> loadGame() async {
     await loadWorld();
+    await loadSound();
+
     setJoyTick();
     setJumpBtn();
     setCamera();
@@ -58,6 +62,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
       cameraComponent,
       mapGame,
     ]);
+
   }
 
   Future<void> loadNextGame() async {
@@ -134,18 +139,19 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
     );
   }
 
-  Future<void> loadSound() async {
+  Future<void> initSound() async {
     await FlameAudio.audioCache.loadAll([
       'bg_music.ogg',
-      'landing_sound.mp3',
-      'coin_sound.mp3',
-      'Hit_sound.mp3',
       'ButtonClick_sound.wav',
-      'GameLose_sound.wav',
-      'WinGame_sound.mp3',
     ]);
 
     await FlameAudio.bgm.initialize();
+  }
+
+  Future<void> loadSound() async {
     await FlameAudio.bgm.play('bg_music.ogg', volume: 0.2);
+
+    hitSound = await FlameAudio.createPool('Hit_sound.mp3', maxPlayers: 5);
+    collectSound = await FlameAudio.createPool('coin_sound.mp3', minPlayers: 50, maxPlayers: 5);
   }
 }

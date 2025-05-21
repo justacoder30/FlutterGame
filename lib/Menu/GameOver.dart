@@ -42,7 +42,7 @@ class GameOver extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () async {
                     game.overlays.remove('GameOver');
-                    game.loadNextGame();
+                    await game.loadNextGame();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: whiteTextColor,

@@ -51,6 +51,8 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
   }
 
   Future<void> loadGame() async {
+    overlays.add('LoadingGame');
+
     await loadWorld();
     await loadSound();
 
@@ -63,6 +65,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
       mapGame,
     ]);
 
+    overlays.remove('LoadingGame');
   }
 
   Future<void> loadNextGame() async {

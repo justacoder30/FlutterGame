@@ -19,7 +19,6 @@ class MainMenu extends StatelessWidget {
             ElevatedButton(
                 onPressed: () {
                   game.overlays.remove('MainMenu');
-                  //game.overlays.add('LoadingGame');
                 },
                 child: Text('Play',style: TextStyle(color: Colors.red,fontSize: 40,fontWeight: FontWeight.bold,)
                 ),

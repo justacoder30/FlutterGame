@@ -24,7 +24,7 @@ class GameOver extends StatelessWidget {
                   game.overlays.remove('GameOver');
                   game.loadNextGame();
                 },
-                child: Text('Continute',style: TextStyle(color: Colors.red,fontSize: 40,fontWeight: FontWeight.bold,)))
+                child: Text('Continue',style: TextStyle(color: Colors.red,fontSize: 40,fontWeight: FontWeight.bold,)))
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'HeroGame.dart';
 import 'Menu/GameOver.dart';
+import 'Menu/LoadingGame.dart';
 import 'Menu/MainMenu.dart';
 
 void main() async {
@@ -16,6 +17,7 @@ void main() async {
     GameWidget(
       game: heroGame,
       overlayBuilderMap: {
+        'LoadingGame': (_, game) => LoadingGame(game: heroGame),
         'MainMenu': (_, game) => MainMenu(game: heroGame),
         'GameOver': (_, game) => GameOver(game: heroGame),
       },

@@ -15,7 +15,10 @@ class GameOver extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Hero Game',style: TextStyle(color: Colors.deepOrange,fontSize: 48,fontWeight: FontWeight.bold,),),
+            SizedBox(height: 10,),
+            Text("Score: ${game.score}", style: TextStyle(color: Colors.white,fontSize: 30),),
             SizedBox(height: 50,),
+
             ElevatedButton(
                 onPressed: () {
                   game.overlays.remove('GameOver');

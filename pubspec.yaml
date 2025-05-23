@@ -68,6 +68,7 @@ flutter:
     - assets/tiles/tileset.tsx
     - assets/tiles/map1.tmx
     - assets/tiles/map2.tmx
+    - assets/images/MapIMG/
     - assets/images/Flag/
     - assets/images/Item/
     - assets/images/Background/

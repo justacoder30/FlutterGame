@@ -20,6 +20,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
   late MapGame mapGame;
   late UI ui;
   late TiledComponent tiledMap;
+  late SpriteComponent mapImage;
   late JoystickComponent joystick;
   late HudButtonComponent jump_btn;
   late Player player;
@@ -82,7 +83,10 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
   Future<void> loadWorld() async {
     player = Player();
     tiledMap = await TiledComponent.load('${level[currentLevel]}.tmx', Vector2.all(16));
-    mapGame = MapGame(tiledMap, player);
+    mapImage = SpriteComponent(
+      sprite: await Sprite.load('MapIMG/${level[currentLevel]}.png'),
+    );
+    mapGame = MapGame(tiledMap, player, mapImage);
     ui = UI();
     score = 0;
   }

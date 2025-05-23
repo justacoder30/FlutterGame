@@ -14,15 +14,17 @@ class MapGame extends World {
   late String level;
   late Player player;
   late TiledComponent map;
+  late SpriteComponent mapImage;
   List<RectBox> collisions = [];
   List<String> object_positions = ["PlayerPosition", "CoinPosition", "EnemyPosition", "HeartPosition", "FlagPosition"];
 
-  MapGame(this.map, this.player);
+  MapGame(this.map, this.player, this.mapImage);
 
   @override
   FutureOr<void> onLoad() async {
     addAll([
-      map,
+      // map,
+      mapImage,
       player,
     ]);
 

@@ -9,7 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_game/Entity/UI.dart';
+import 'package:flutter_game/Entity/Health.dart';
 import 'package:flutter_game/Entity/background.dart';
 import 'package:flutter_game/Entity/map.dart';
 

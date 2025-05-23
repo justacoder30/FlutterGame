@@ -15,7 +15,7 @@ class _LoadingGameState extends State<LoadingGame> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 10), () {
+    Future.delayed(Duration(seconds: 2), () {
       widget.game.overlays.remove('LoadingGame');
     });
   }

@@ -17,9 +17,9 @@ void main() async {
     GameWidget(
       game: heroGame,
       overlayBuilderMap: {
-        'LoadingGame': (_, game) => LoadingGame(game: heroGame),
         'MainMenu': (_, game) => MainMenu(game: heroGame),
         'GameOver': (_, game) => GameOver(game: heroGame),
+        'LoadingGame': (_, __) =>LoadingGame(),
       },
       initialActiveOverlays: const ['MainMenu'],
     ),

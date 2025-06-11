@@ -9,7 +9,7 @@ class JumpState implements StateOfPlayer {
     player.current = State.jump;
     player.isHit = false;
 
-    if (player.velocity.y > 0) {
+    if (player.velocity.y >= 0) {
       return Fallstate();
     }
 

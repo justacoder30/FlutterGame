@@ -30,7 +30,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   bool isHit = false;
   final double HP = 50;
   late double currentHP;
-  late Vector2 spawnPos;
   double damageTaken = 0;
   Vector2 velocity = Vector2.zero();
   StateOfPlayer state = IdleState();
@@ -47,9 +46,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
 
   void setSpawnPoint(Vector2 pos) {
     position = Vector2(pos.x + hitbox.width/2, pos.y + hitbox.height/2);
-    spawnPos = position.clone();
     currentHP = HP;
-    // spawnPos = position;
   }
 
   @override
@@ -216,12 +213,5 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     currentHP -= damageTaken;
     game.hitSound.start(volume: 1);
     game.health.removeHearts();
-  }
-
-  void reSpawn() {
-    game.health.removeHearts();
-    position = spawnPos.clone();
-    currentHP = HP;
-    game.health.loadHearts();
   }
 }

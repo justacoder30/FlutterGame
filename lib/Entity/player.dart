@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/collisions.dart';
@@ -20,10 +21,12 @@ enum State {
 }
 
 class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler{
-  final double graviry = 500;
   final double moveSpeed = 200;
-  final double jump = 320;
   final texSize = Vector2(128, 128);
+  double graviry = 500;
+  double jump = 320;
+  double jumpTime = 0.7;
+  double jumpHeight = 100;
   bool isOnGround = false;
   bool isFacingRight = true;
   bool isJump = false;
@@ -70,7 +73,8 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     // anchor = Anchor(0.1640625, 0.5);
     anchor = Anchor(0.25, 0.75);
 
-
+    graviry = (2 * jumpHeight) /(jumpTime*jumpTime);
+    jump = sqrt(2 * graviry* jumpHeight);
     return super.onLoad();
   }
 
@@ -178,7 +182,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   void updatePosition(double dt) {
     position.x += velocity.x * dt;
     collision("x");
-    position.y += velocity.y * dt + graviry * dt * dt;
+    position.y += velocity.y * dt + 0.5 * graviry * dt * dt;
     velocity.y += graviry * dt;
     collision("y");
   }

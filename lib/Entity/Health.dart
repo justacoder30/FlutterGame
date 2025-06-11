@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flutter_game/HeroGame.dart';
 
-class UI extends PositionComponent with HasGameReference<HeroGame> {
+class Health extends PositionComponent with HasGameReference<HeroGame> {
   final Vector2 texSize = Vector2.all(16);
   List<SpriteComponent> heartlist = [];
   late int numHeart;

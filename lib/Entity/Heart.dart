@@ -49,7 +49,7 @@ class Heart extends SpriteAnimationGroupComponent with HasGameReference<HeroGame
       game.collectSound.start(volume: 0.7);
       game.score += score;
       game.player.currentHP += health;
-      game.ui.increaseHeart();
+      game.health.increaseHeart();
       removeFromParent();
     }
     super.onCollision(intersectionPoints, other);

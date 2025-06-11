@@ -18,7 +18,7 @@ import 'Entity/player.dart';
 class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection {
   late CameraComponent cameraComponent;
   late MapGame mapGame;
-  late UI ui;
+  late Health health;
   late TiledComponent tiledMap;
   late SpriteComponent mapImage;
   late JoystickComponent joystick;
@@ -87,7 +87,7 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
       sprite: await Sprite.load('MapIMG/${level[currentLevel]}.png'),
     );
     mapGame = MapGame(tiledMap, player, mapImage);
-    ui = UI();
+    health = Health();
     score = 0;
   }
 
@@ -110,11 +110,11 @@ class HeroGame extends FlameGame with HasKeyboardHandlerComponents, HasCollision
       ),
     );
 
-    cameraComponent.follow(player);
+    cameraComponent.follow(player, maxSpeed: 250);
 
 
     cameraComponent.viewport.addAll([
-      ui,
+      health,
       joystick,
       jump_btn,
     ]);

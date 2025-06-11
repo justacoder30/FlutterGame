@@ -20,9 +20,9 @@ enum State {
 }
 
 class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGame>, KeyboardHandler{
-  final double graviry = 1000;
+  final double graviry = 500;
   final double moveSpeed = 200;
-  final double jump = 450;
+  final double jump = 320;
   final texSize = Vector2(128, 128);
   bool isOnGround = false;
   bool isFacingRight = true;
@@ -215,13 +215,13 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   Future<void> beingHit() async {
     currentHP -= damageTaken;
     game.hitSound.start(volume: 1);
-    game.ui.removeHearts();
+    game.health.removeHearts();
   }
 
   void reSpawn() {
-    game.ui.removeHearts();
+    game.health.removeHearts();
     position = spawnPos.clone();
     currentHP = HP;
-    game.ui.loadHearts();
+    game.health.loadHearts();
   }
 }

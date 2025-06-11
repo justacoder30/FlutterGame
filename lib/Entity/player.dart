@@ -120,8 +120,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
 
   void updateGraviry(double dt) {
     isOnGround = IsOnGround();
-
-    if(!isOnGround) velocity.y += graviry * dt;
   }
 
   void updateState() {
@@ -180,7 +178,8 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
   void updatePosition(double dt) {
     position.x += velocity.x * dt;
     collision("x");
-    position.y += velocity.y * dt;
+    position.y += velocity.y * dt + graviry * dt * dt;
+    velocity.y += graviry * dt;
     collision("y");
   }
 

@@ -3,22 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../HeroGame.dart';
 
-class LoadingGame extends StatefulWidget {
-  final HeroGame game;
-  const LoadingGame({super.key, required this.game});
-
-  @override
-  State<LoadingGame> createState() => _LoadingGameState();
-}
-
-class _LoadingGameState extends State<LoadingGame> {
-  @override
-  void initState() {
-    super.initState();
-    // Future.delayed(Duration(seconds: 2), () {
-    //   widget.game.overlays.remove('LoadingGame');
-    // });
-  }
+class LoadingGame extends StatelessWidget {
+  const LoadingGame({super.key});
 
   @override
   Widget build(BuildContext context) {

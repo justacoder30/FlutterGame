@@ -17,7 +17,7 @@ void main() async {
     GameWidget(
       game: heroGame,
       overlayBuilderMap: {
-        'LoadingGame': (_, game) => LoadingGame(game: heroGame),
+        'LoadingGame': (_, __) => LoadingGame(),
         'MainMenu': (_, game) => MainMenu(game: heroGame),
         'GameOver': (_, game) => GameOver(game: heroGame),
       },

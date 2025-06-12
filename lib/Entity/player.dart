@@ -74,7 +74,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<HeroGam
     anchor = Anchor(0.25, 0.75);
 
     graviry = (2 * jumpHeight) /(jumpTime*jumpTime);
-    jump = sqrt(2 * graviry* jumpHeight);
+    jump = 2 * jumpHeight/ jumpTime;
     return super.onLoad();
   }
 
